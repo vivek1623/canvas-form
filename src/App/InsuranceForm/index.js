@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     color: theme.palette.common.white
   },
-  signUpLink: {
+  contactUsLink: {
     marginLeft: theme.spacing(1),
     fontWeight: 500,
     cursor: 'pointer'
@@ -90,8 +90,8 @@ const InsuranceForm = () => {
 
   const { values, errors, setErrors, handleInputChange, resetForm } = useForm(initialValues, true, validate)
 
-  const goToSignup = () => {
-    // history.push(ROUTE_PATH.SIGNUP)
+  const goToContactUs = () => {
+    console.log('goToContactUs')
   }
 
   const handleSubmit = event => {
@@ -225,10 +225,10 @@ const InsuranceForm = () => {
       <Typography variant='body1' align='center' gutterBottom>
         Need any help?
         <Link
-          className={classes.signUpLink}
+          className={classes.contactUsLink}
           varient='body1'
           component='span'
-          onClick={goToSignup}
+          onClick={goToContactUs}
         >
           Contact us now
         </Link>
