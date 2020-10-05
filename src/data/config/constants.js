@@ -13,3 +13,5 @@ export const THEME_TYPE = {
 }
 
 export const BRUSH_SIZE = 2
+
+export const REDIRECT_URL = 'https://github.com/vivek1623/game-change-canvas-form'

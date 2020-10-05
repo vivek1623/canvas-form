@@ -8,6 +8,7 @@ import Link from '@material-ui/core/Link'
 import useForm from '../../data/hooks/useForm'
 
 import { isEmail } from '../../data/config/utils'
+import { REDIRECT_URL } from '../../data/config/constants'
 
 import Form from '../../components/Form'
 import InputItem from '../../components/InputItem'
@@ -115,7 +116,7 @@ const InsuranceForm = ({ setNotify }) => {
       setNotify({
         isOpen: true,
         type: 'error',
-        message: 'Please enter valid date'
+        message: 'Please enter valid data'
       })
     }
   }
@@ -257,10 +258,10 @@ const InsuranceForm = ({ setNotify }) => {
           className={classes.contactUsLink}
           varient='body1'
           component='a'
-          href='https://github.com/vivek1623'
+          href={REDIRECT_URL}
           target='_blank'
         >
-          Contact us now
+          Don't worry, I am here 
         </Link>
       </Typography>
       <ConfirmDialog
