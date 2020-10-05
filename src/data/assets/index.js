@@ -1,0 +1,1 @@
+export const editIcon = require('./edit.ico')
