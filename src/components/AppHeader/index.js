@@ -7,7 +7,7 @@ const AppHeader = () => {
   return (
     <AppBar position="fixed">
       <Toolbar>
-      <Typography variant="h6" style={{fontWeight: 600}}>Game Change</Typography>
+      <Typography variant="h6" style={{fontWeight: 600}}>Canvas Form</Typography>
       </Toolbar>
     </AppBar>
   )
