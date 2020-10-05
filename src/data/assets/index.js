@@ -1,1 +1,1 @@
-export const editIcon = require('./edit.ico')
+export const editIcon = require('./pencil.png')

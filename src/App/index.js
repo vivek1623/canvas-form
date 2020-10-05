@@ -64,84 +64,23 @@ const App = () => {
   const [startPainting, setStartPainting] = useState(false)
   const classes = useStyles()
   const theme = createMuiTheme(darkTheme ? dark : light)
+
   const contentRef = useRef(null)
+  const canvasRef = useRef(false)
+  const isPainting = useRef(false)
+  const prevPos = useRef({ offsetX: 0, offsetY: 0 })
+  const ctx = useRef(false)
 
   useEffect(() => {
-    let flag = false;
-    let prevX = 0;
-    let currX = 0;
-    let prevY = 0;
-    let currY = 0;
-    let dot_flag = false;
-    let w = contentRef.current.clientWidth;
-    let h = contentRef.current.clientHeight;
-    let ctx = false;
-    let canvas = false;
+    const w = contentRef.current.clientWidth
+    const h = contentRef.current.clientHeight
 
     if (startPainting) {
-      canvas = document.getElementById('formCanvas');
-      ctx = canvas.getContext("2d");
-      canvas.width = w
-      canvas.height = h
-    } else if (canvas) {
-      ctx.clearRect(0, 0, w, h);
-    }
-
-    const findMousePosition = (res, e) => {
-      const rect = canvas.getBoundingClientRect()
-      if (res === 'down') {
-        prevX = currX;
-        prevY = currY;
-        currX = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
-        currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
-        flag = true;
-        dot_flag = true;
-        if (dot_flag) {
-          ctx.beginPath();
-          ctx.fillStyle = COLORS.SECONDARY;
-          ctx.fillRect(currX, currY, 2, 2);
-          ctx.closePath();
-          dot_flag = false;
-        }
-      }
-      if (res === 'up' || res === "out") {
-        flag = false;
-      }
-      if (res === 'move') {
-        if (flag) {
-          prevX = currX;
-          prevY = currY;
-          currX = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
-          currY = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
-          draw();
-        }
-      }
-    }
-
-    const draw = () => {
-      ctx.beginPath();
-      ctx.moveTo(prevX, prevY);
-      ctx.lineTo(currX, currY);
-      ctx.strokeStyle = COLORS.SECONDARY;
-      ctx.lineWidth = BRUSH_SIZE;
-      ctx.stroke();
-      ctx.closePath();
-    }
-
-    if (canvas) {
-      canvas.addEventListener("mousemove", e => findMousePosition('move', e), false);
-      canvas.addEventListener("mousedown", e => findMousePosition('down', e), false);
-      canvas.addEventListener("mouseup", e => findMousePosition('up', e), false);
-      canvas.addEventListener("mouseout", e => findMousePosition('out', e), false);
-    }
-
-    return () => {
-      if (canvas) {
-        canvas.removeEventListener("mousemove", e => findMousePosition('move', e), false);
-        canvas.removeEventListener("mousedown", e => findMousePosition('down', e), false);
-        canvas.removeEventListener("mouseup", e => findMousePosition('up', e), false);
-        canvas.removeEventListener("mouseout", e => findMousePosition('out', e), false);
-      }
+      ctx.current = canvasRef.current.getContext("2d")
+      canvasRef.current.width = w
+      canvasRef.current.height = h
+    } else if (ctx.current) {
+      ctx.current.clearRect(0, 0, w, h);
     }
   }, [startPainting])
 
@@ -155,6 +94,40 @@ const App = () => {
     setStartPainting(startPainting => !startPainting)
   }
 
+  const onMouseDown = ({ nativeEvent }) => {
+    const { offsetX, offsetY } = nativeEvent;
+    isPainting.current = true;
+    prevPos.current = { offsetX, offsetY };
+  }
+
+  const onMouseMove = ({ nativeEvent }) => {
+    if (isPainting.current) {
+      const { offsetX, offsetY } = nativeEvent;
+      const offSetData = { offsetX, offsetY };
+      draw(offSetData);
+    }
+  }
+
+  const endPaintEvent = () => {
+    if (isPainting.current)
+      isPainting.current = false
+  }
+
+  const draw = currPos => {
+    const { offsetX, offsetY } = currPos;
+    const { offsetX: x, offsetY: y } = prevPos.current;
+    ctx.current.beginPath();
+    ctx.current.moveTo(x, y);
+    ctx.current.lineTo(offsetX, offsetY);
+    ctx.current.strokeStyle = COLORS.PRIMARY;
+    ctx.current.lineWidth = BRUSH_SIZE;
+    ctx.current.lineJoin = 'round';
+    ctx.current.lineCap = 'round';
+    ctx.current.stroke();
+    ctx.current.closePath()
+    prevPos.current = { offsetX, offsetY };
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -163,10 +136,15 @@ const App = () => {
         {
           startPainting &&
           <canvas
+            ref={canvasRef}
             id="formCanvas"
             className={classes.formCanvas}
             style={{ cursor: `url(${editIcon}), default` }}
-          ></canvas>
+            onMouseDown={onMouseDown}
+            onMouseLeave={endPaintEvent}
+            onMouseUp={endPaintEvent}
+            onMouseMove={onMouseMove}
+          />
         }
         <div ref={contentRef} className={classes.contentContainer}>
           <Fab
