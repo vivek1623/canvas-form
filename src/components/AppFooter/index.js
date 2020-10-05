@@ -21,7 +21,7 @@ const AppFooter = memo(() => {
   return (
     <Typography
       className={classes.appFooter}
-      variant="span"
+      variant="body2"
       align= 'center'
     >
       Created By - VIVEK VAIBHAV

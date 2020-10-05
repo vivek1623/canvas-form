@@ -19,7 +19,9 @@ import dark from '../data/theme/dark'
 
 import AppHeader from '../components/AppHeader'
 import AppFooter from '../components/AppFooter'
+import Notification from '../components/Notification'
 import InsuranceForm from './InsuranceForm'
+
 
 const useStyles = makeStyles(theme => ({
   appContainer: {
@@ -60,9 +62,17 @@ const useStyles = makeStyles(theme => ({
 
 const isDarkTheme = getDataFromLocalStorage(LOCAL_STORAGE.IS_DARK_THEME, false)
 
+const notificationInitialState = {
+  isOpen: false,
+  message: '',
+  type: ''
+}
+
 const App = () => {
   const [darkTheme, setDarkTheme] = useState(isDarkTheme)
   const [startPainting, setStartPainting] = useState(false)
+  const [notify, setNotify] = useState(notificationInitialState)
+
   const classes = useStyles()
   const theme = createMuiTheme(darkTheme ? dark : light)
 
@@ -172,11 +182,15 @@ const App = () => {
           </Fab>
           <Grid container direction='row' justify='center'>
             <Grid item xs={12} sm={10}>
-              <InsuranceForm />
+              <InsuranceForm setNotify={setNotify}/>
             </Grid>
           </Grid>
         </div>
         <AppFooter />
+        <Notification
+          notify={notify}
+          setNotify={setNotify}
+        />
       </Paper>
     </ThemeProvider>
   );

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -15,6 +15,7 @@ import RadioGroupItem from '../../components/RadioGroupItem'
 import CheckboxItem from '../../components/CheckboxItem'
 import SelectItem from '../../components/SelectItem'
 import DatePickerItem from '../../components/DatePickerItem'
+import ConfirmDialog from '../../components/ConfirmDialog'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     margin: theme.spacing(1),
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
+    fontWeight: 600
   },
   contactUsLink: {
     marginLeft: theme.spacing(1),
@@ -65,7 +67,15 @@ const initialValues = {
   residentialAddress: ''
 }
 
-const InsuranceForm = () => {
+const initialDialogValue = {
+  isOpen: false,
+  title: '',
+  subTitle: ''
+}
+
+const InsuranceForm = ({ setNotify }) => {
+  const [confirmDialog, setConfirmDialog] = useState(initialDialogValue)
+
   const classes = useStyles()
 
   const validate = fieldValue => {
@@ -90,15 +100,34 @@ const InsuranceForm = () => {
 
   const { values, errors, setErrors, handleInputChange, resetForm } = useForm(initialValues, true, validate)
 
-  const goToContactUs = () => {
-    console.log('goToContactUs')
+  const onSubmitConfirm = () => {
+    if (validate()) {
+      console.log('submit', values)
+      setConfirmDialog(initialDialogValue)
+      resetForm()
+      setNotify({
+        isOpen: true,
+        type: 'success',
+        message: 'Your Application is submitted sucessfully.'
+      })
+    } else {
+      setConfirmDialog(initialDialogValue)
+      setNotify({
+        isOpen: true,
+        type: 'error',
+        message: 'Please enter valid date'
+      })
+    }
   }
 
   const handleSubmit = event => {
     event.preventDefault()
-    if (validate()) {
-      console.log('submit', values)
-    }
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Are you sure to submit this record?',
+      subTitle: "You can't undo this operation",
+      onConfirm: onSubmitConfirm
+    })
   }
 
   return (
@@ -227,12 +256,17 @@ const InsuranceForm = () => {
         <Link
           className={classes.contactUsLink}
           varient='body1'
-          component='span'
-          onClick={goToContactUs}
+          component='a'
+          href='https://github.com/vivek1623'
+          target='_blank'
         >
           Contact us now
         </Link>
       </Typography>
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </Fragment>
   )
 }
