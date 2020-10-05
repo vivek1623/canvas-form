@@ -1,13 +1,12 @@
-const primaryMain = "#fc00ff"
-const secondaryMain = "#59cbf7"
+import { COLORS } from '../config/constants'
 
 const theme = {
   palette: {
     primary: {
-      main: primaryMain
+      main: COLORS.PRIMARY
     },
     secondary: {
-      main: secondaryMain
+      main: COLORS.SECONDARY
     },
   }
 }
