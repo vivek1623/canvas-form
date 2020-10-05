@@ -18,6 +18,7 @@ import light from '../data/theme/light'
 import dark from '../data/theme/dark'
 
 import AppHeader from '../components/AppHeader'
+import AppFooter from '../components/AppFooter'
 import InsuranceForm from './InsuranceForm'
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   contentContainer: {
     overflowY: "auto",
     paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(4),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(8)
   },
@@ -175,6 +176,7 @@ const App = () => {
             </Grid>
           </Grid>
         </div>
+        <AppFooter />
       </Paper>
     </ThemeProvider>
   );
