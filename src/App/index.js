@@ -30,7 +30,6 @@ const useStyles = makeStyles(theme => ({
     position: 'relative'
   },
   contentContainer: {
-    overflowY: "auto",
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(4),
     paddingLeft: theme.spacing(2),
@@ -87,13 +86,22 @@ const App = () => {
     const h = contentRef.current.clientHeight
 
     if (startPainting) {
+      document.body.addEventListener('touchmove', preventDefault, { passive: false });
       ctx.current = canvasRef.current.getContext("2d")
       canvasRef.current.width = w
       canvasRef.current.height = h
     } else if (ctx.current) {
       ctx.current.clearRect(0, 0, w, h);
+      document.body.removeEventListener('touchmove', preventDefault);
+    }
+    return () => {
+      document.body.removeEventListener('touchmove', preventDefault);
     }
   }, [startPainting])
+
+  const preventDefault = e => {
+    e.preventDefault()
+  }
 
   const handleThemeChange = () => {
     const isDarkThemeSelected = !darkTheme
@@ -122,6 +130,28 @@ const App = () => {
   const endPaintEvent = () => {
     if (isPainting.current)
       isPainting.current = false
+  }
+
+  const onTouchStart = e => {
+    if (e.touches && e.touches.length === 1) {
+      const touch = e.touches[0]
+      isPainting.current = true;
+      prevPos.current = {
+        offsetX: touch.pageX - touch.target.offsetLeft,
+        offsetY: touch.pageY - touch.target.offsetTop
+      };
+    }
+  }
+
+  const onTouchMove = e => {
+    if (e.touches && e.touches.length === 1) {
+      const touch = e.touches[0]
+      const offSetData = {
+        offsetX: touch.pageX - touch.target.offsetLeft,
+        offsetY: touch.pageY - touch.target.offsetTop
+      };
+      draw(offSetData);
+    }
   }
 
   const draw = currPos => {
@@ -155,6 +185,9 @@ const App = () => {
             onMouseLeave={endPaintEvent}
             onMouseUp={endPaintEvent}
             onMouseMove={onMouseMove}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={endPaintEvent}
           />
         }
         <div ref={contentRef} className={classes.contentContainer}>
@@ -182,7 +215,7 @@ const App = () => {
           </Fab>
           <Grid container direction='row' justify='center'>
             <Grid item xs={12} sm={10}>
-              <InsuranceForm setNotify={setNotify}/>
+              <InsuranceForm setNotify={setNotify} />
             </Grid>
           </Grid>
         </div>
