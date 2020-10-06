@@ -73,5 +73,5 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 - Dark Mode
 - Theme Setting
 
-### deployment
-- this project is deployed on https://canvas-form.herokuapp.com/
+### Deployment
+- This project is deployed on https://canvas-form.herokuapp.com/
