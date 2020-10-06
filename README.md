@@ -63,5 +63,15 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 
 # Output:  
+- All desire features implemented.
 
+### Bonus Features
+- Form Validation
+- Submit confirmation Dialog box
+- Reset form
+- Notification
+- Dark Mode
+- Theme Setting
+
+### deployment
 - this project is deployed on https://canvas-form.herokuapp.com/
