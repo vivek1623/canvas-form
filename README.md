@@ -41,7 +41,7 @@
 - Theme Setting
 
 ### Deployment
-- This project is deployed on https://canvas-form.herokuapp.com/
+- This project is deployed on https://canvas-form.vercel.app/
 
 ## Available Scripts
 
