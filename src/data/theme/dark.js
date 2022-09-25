@@ -1,15 +1,15 @@
-import { COLORS } from '../config/constants'
+import { COLORS } from "../config/constants"
 
 const theme = {
   palette: {
     type: "dark",
     primary: {
-      main: COLORS.PRIMARY
+      main: COLORS.PRIMARY,
     },
     secondary: {
-      main: COLORS.SECONDARY
+      main: COLORS.SECONDARY,
     },
-  }
+  },
 }
 
 export default theme
