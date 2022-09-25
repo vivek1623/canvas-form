@@ -4,7 +4,7 @@ export const LOCAL_STORAGE = {
 
 export const COLORS = {
   PRIMARY: "#8d00ff",
-  SECONDARY: "#04adc9",
+  SECONDARY: "#00c0fa",
 }
 
 export const THEME_TYPE = {
